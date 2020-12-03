@@ -1,0 +1,175 @@
+'''CS5001 Spring2020
+   Xue Wu
+   Project -- design
+'''
+
+
+Level accomplished: A+
+
+0. extra point:
+
+0.1 add sound to the game
+	Install 2 package before running this part. 
+	pip3 install playsound 
+	pip3 install -U PyObjC
+	play sound every time when players make a selection on game board 
+
+0.2 instead of using built-in turtle circles, find and use images instead
+	I cannot find exactly the same image as Laney shows in the link. So use two other 
+	images instead. 'red.gif' &'yellow.gif'
+
+0.3 add the pop out variation
+    	Computer would adding piece every time, user have the choice to pop out instead
+	of adding. There is a pop-out button on the screen, if user want to use that,
+	simply first click the pop-out button, then click the triangle to show which 
+	column they want to remove. 
+
+	0.3.1 Correct Remove:
+		we only consider remove the top circle in that column. So if the user 
+		make correct selection, which means the first circle in that column is 
+		their opponent's piece, we will remove that.
+
+	0.3.2 Wrong Remove: 
+		if the top circle in the user chosen column is NOT their opponent's piece, 
+		we will NOT remove that, and will do next round, change player and keep playing.
+	
+【Classes defined】 
+
+1. Class defined
+
+1.1 Class Gameboard 
+
+1.1.1 Attributes: 
+	【self.column】 game-board column 
+	【self.row】 game-board row
+	【self.board】 to remember each step made by players
+	【self.length】 game-board total length
+	【self.width】 game-board total width
+	【self.x】 Lower left corner circle coordinate x
+	【self.y】Lower left corner circle coordinate y
+	【self.player】 current player 
+	【self.count_chess】 to remember number of chess in each column
+	【self.score】 a Score(class) object
+	【self.popout】 a flag to show player do pop-out or not 
+	【self.mode】current game mode. There are two game mode: 
+		    1 -- Computer VS Human. 2 -- Human VS Human
+	【self.playerturn】 turtle func. To show current player turns on screen
+	【self.screen】 turtle func. Screen control
+	【self.update_chess】turtle func. To show chess movement on the board 
+
+1.1.2 Methods: 
+	【__init__】Constructor. Initializes attributes to their default values
+	【count_list】A dictionary. Initial all value to be 0.
+		     To remember the number of chess in each column,
+		     determine players action is valid or not. If count_chess[column] == 
+		     total row, means that column is full and cannot add more chess. 
+	【game_prepare】Combine several functions. Display game-board, circles,   			       
+		       triangles, player-turns, pop_out button, top-text, initial 	 		       
+		       count_list dictionary.
+	【update_on_lst】Update players chess movement on the board list. 'RED'/'YELLOW'
+	【player_turns】Change player
+	【one_round】Include several steps. Update chess on board list; update chess on 			    
+		    screen; update count dictionary; determine if the game is over or not 
+	【click】user method. User have two options. They can click pop_out button first, 		
+		and then click the triangle to remove opponent's chess. Or they can simply 		
+		click the triangle to add piece on board. Determine user's motivation, 			
+		show related steps.
+	【game_start_mode_1】Computer VS Human player. Each round begin with this function.
+			    If user round, do user part. If computer round, random select
+		 	    a number, do one_round 
+	【game_start_mode_2】Human Player1 VS Human player2. Each round begin with this click function.
+	【is_full】Using dictionary to determine the board is full or not. Return boolean.
+	【is_streak】4 ways to determine streak. Row/Column/Positive diagonal/Negative 			    
+		    diagonal. Return boolean.
+	【is_game_over】Determine game continue or over via is_streak/is_full
+	【pop_out】remove opponent piece from the top of the selected column. 
+	【sound】Add sound to the game when playing chess. Needs to install packages 			
+		first.
+
+1.2 Class Score
+
+1.2.1 Attributes:
+	【self.score】player score
+
+1.2.2 Methods:
+	【__init__】Constructor. Initializes attributes to their default values
+	【initialize_score】Get player's score. If new player, initial score file = 0
+	【updated_score】Update player's score file when they win. + 1
+
+
+2. Data Structures used: 
+	【list】
+	【dictionary】
+	【tuple】
+
+3. Non-class functions:
+	【start_msg】Prompt user to input column and row
+	【initial_board】initial board list with element 0
+	【board_bg】Turtle function. Display game-board
+	【draw_circle】Turtle function. Display initial white circle
+	【triangle】Turtle function. Display triangles on the top
+	【top_text】Turtle function. Display player score on the top
+	【playerturn_display】Turtle function. Display player turns
+	【pop_button】Turtle function. Display pop_out button
+	【update_movement】Turtle function. Display chess movement
+	【win_text】Turtle function. Display final page: win text 
+
+	
+4. Summary of the testing part
+	
+4.1 Unit tests(test_unittest.py)
+
+	Unite test for those class methods and functions that contain calculation, 
+	return result, initial attributes, update file.
+	
+	Following methods/functions are tested:
+	4.1.1 Class gameboard init 
+	4.1.2 Class score init, initialize_score, updated_score
+	4.1.3 initial_board function 
+
+4.2 Normal tests(test_game_class_methods.py)
+
+	Test those functions by given several test cases in different situations. 
+	
+	Following methods/functions are tested:
+	4.2.1 count_lst
+	4.2.2 update_on_lst
+	4.2.3 player_turns
+	4.2.4 is_streak
+
+4.3 Other tests
+	
+4.3.1 Run several times with different input (includes all turtle-related-function)
+
+	Test those functions by run several times with different input, to see whether those
+	works well. All the graph shown correctly. All the msg returned correctly. 
+
+	Following functions/methods are tested:
+	4.3.1.1 board_bg
+	4.3.1.2 draw_circle
+	4.3.1.3 triangle
+	4.3.1.4 top_text
+	4.3.1.5 playerturn_display
+	4.3.1.6 pop_button
+	4.3.1.7 update_movement
+	4.3.1.8 win_text
+	4.3.1.9 start_msg
+	
+4.3.2 Test while playing games
+
+	Their main duty is processing the functions inside. So I play the game multiple times, 
+	to test if all the func inside works one by one correctly. 
+
+	Following functions/methods are tested:
+	4.3.2.1 game_prepare
+	4.3.2.2 one_round
+	4.3.2.3 click
+	4.3.2.4 game_start_mode_1
+	4.3.2.5 game_start_mode_2
+	4.3.2.6 is_game_over
+	4.3.2.7 pop_out
+	4.3.2.8 sound 
+	
+		
+
+
